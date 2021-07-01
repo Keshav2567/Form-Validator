@@ -4,6 +4,7 @@ const confirmPassword = document.getElementById('confirm-password');
 const mobile = document.getElementById('mobile');
 const submitBtn = document.getElementById('submit');
 
+//Selecting paragraph and SVGs tags
 const usernamePara = document.querySelector('#username + p');
 const usernameSvg = document.querySelector('#username + p + svg');
 
@@ -22,37 +23,51 @@ const usernameValidate = /^(?![0-9])[a-zA-Z0-9_-]{1,}$/;
 const passwordValidate = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[A-Z])[a-zA-Z0-9!@#$%^&*]{8,14}$/;
 const mobileValidate = /^\d{10}$/;
 
-validate(usernameValidate, username, usernamePara, usernameSvg);
-validate(passwordValidate, password, passwordPara, passwordSvg);
-validate(mobileValidate, mobile, mobilePara, mobileSvg);
-confirmPassword.addEventListener('blur', isMatch)
+// Running the function to validate when a value is input in the form
+validateOnInput(usernameValidate, username, usernamePara, usernameSvg);
+validateOnInput(passwordValidate, password, passwordPara, passwordSvg);
+validateOnInput(mobileValidate, mobile, mobilePara, mobileSvg);
+confirmPassword.addEventListener('input', isMatch)
 
-// A function to check if the input is valid or not
-function validate(regex, element, para, svg) {
-	element.addEventListener('blur', () => {
-		// To test value of input field matches with the given regular expression or not
-		let elementValue = regex.test(element.value);
+// Validating the form when user clicks the submit button
+submitBtn.addEventListener('click',
+	() => {
+		validate(usernameValidate, username, usernamePara, usernameSvg);
+		validate(passwordValidate, password, passwordPara, passwordSvg);
+		validate(mobileValidate, mobile, mobilePara, mobileSvg);
+	});
 
-		// if it doesn't match, it'll show an error messages
-		if (!elementValue) {
-			para.style.display = 'block';
-			svg.style.display = 'block';
-		} else {
-			para.style.display = 'none';
-			svg.style.display = 'none';
-		}
+// A function to check if the input value is valid or not
+function validateOnInput(regex, element, para, svg) {
+	element.addEventListener('input', () => {
+		validate(regex, element, para, svg);
 	})
+}
+
+// To check if the form is valid or not when clicked on submit button
+function validate(regex, element, para, svg) {
+	// To test value of input field matches with the given regular expression or not
+	let elementValue = regex.test(element.value);
+
+	// if it doesn't match, it'll show an error messages
+	if (!elementValue) {
+		para.style.display = 'block';
+		svg.style.display = 'block';
+	} else {
+		para.style.display = 'none';
+		svg.style.display = 'none';
+	}
 }
 
 // Checks if password matches with confirm password
 function isMatch() {
-	if (password.value === confirmPassword.value) {
-		confirmPasswordPara.style.display = 'none';
-		confirmPasswordSvg.style.display = 'none';
-	} else {
-		confirmPasswordPara.style.display = 'block';
-		confirmPasswordSvg.style.display = 'block';
-	}
+		if (password.value === confirmPassword.value) {
+			confirmPasswordPara.style.display = 'none';
+			confirmPasswordSvg.style.display = 'none';
+		} else {
+			confirmPasswordPara.style.display = 'block';
+			confirmPasswordSvg.style.display = 'block';
+		}
 }
 
 // For toggling password state to visible and hidden
